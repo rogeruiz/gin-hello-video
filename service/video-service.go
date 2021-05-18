@@ -2,8 +2,12 @@ package service
 
 import "github.com/rogeruiz/gin-hello-world/entity"
 
+// VideoService represents a Gin service.
 type VideoService interface {
+	// Save is a function which appends a video to the videoService
+	// structure. It returns the video being added.
 	Save(entity.Video) entity.Video
+	// FindAll returns all the videos found in the videoService structure.
 	FindAll() []entity.Video
 }
 
@@ -11,6 +15,7 @@ type videoService struct {
 	videos []entity.Video
 }
 
+// New creates a new VideoService.
 func New() VideoService {
 	return &videoService{}
 }

@@ -8,8 +8,12 @@ import (
 	"github.com/rogeruiz/gin-hello-world/validators"
 )
 
+// VideoController represents a Gin controller.
 type VideoController interface {
+	// FindAll returns a slice of all videos
 	FindAll() []entity.Video
+	// Save is a function that saves the video from the Gin context/data
+	// passed in after performing validation.
 	Save(ctx *gin.Context) error
 }
 
@@ -19,6 +23,7 @@ type controller struct {
 
 var validate *validator.Validate
 
+// New creates a new VideoController.
 func New(service service.VideoService) VideoController {
 	validate = validator.New()
 	validate.RegisterValidation("is-cool", validators.ValidateCoolTitle)
