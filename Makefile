@@ -5,6 +5,7 @@ __check_defined = \
     $(if $(value $1),, \
       $(error Undefined $1$(if $2, ($2))))
 
+.PHONY: is-server-running
 is-server-running:
 	@nc -zv 127.0.0.1 8800 &> /dev/null || \
 		if [ $$? -eq 1 ]; then echo "The development server is not running.\nRun \`make run-dev\` in another terminal."; false; fi
