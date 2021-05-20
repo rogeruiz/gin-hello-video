@@ -27,6 +27,11 @@ func main() {
 
 	server := gin.New()
 
+	server.Static("/static/css", "./templates/css/")
+	server.Static("/static/vendor", "./templates/vendor/")
+
+	server.LoadHTMLGlob("./templates/*.html")
+
 	server.Use(
 		gin.Recovery(),
 		middlewares.Logger(),
