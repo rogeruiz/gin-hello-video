@@ -19,33 +19,33 @@ expand-vendor-files: ## Expands the compressed vendor files in templates/vendor 
 	@unzip -d templates/vendor/ $(shell find templates/vendor/ -iname 'bootstrap*.zip')
 
 .PHONY: run-dev
-run-dev: ## Runs the development server
+run-dev: ## Runs the development server.
 	@go run server.go
 
 .PHONY: get-videos
-get-videos: is-server-running ## Run a curl GET request to /videos and pipe the reponse through jq
-	@curl -s localhost:8800/videos | jq
+get-videos: is-server-running ## Run a curl GET request to /videos and pipe the reponse through `jq`.
+	@curl -s localhost:8800/api/videos | jq
 
 .PHONY: get-videos-auth
-get-videos-auth: is-server-running ## Runs a curl GET request with Auth to /videos and pipe the response through jq
-	@curl -s -u 'rogeruiz:test' localhost:8800/videos | jq
+get-videos-auth: is-server-running ## Runs a curl GET request with Auth to /videos and pipe the response through `jq`.
+	@curl -s -u 'rogeruiz:test' localhost:8800/api/videos | jq
 
 .PHONY: post-video
-post-video: is-server-running ## Run a curl POST request to /videos with TITLE, DESCRIPTION, and URL passed into the JSON payload
+post-video: is-server-running ## Run a curl POST request to /videos with TITLE, DESCRIPTION, and URL passed into the JSON payload.
 	$(call check_defined, TITLE)
 	$(call check_defined, DESCRIPTION)
 	$(call check_defined, URL)
-	@curl -s -X POST -H "Content-Type: application/json" -d '{"title": "${TITLE}", "description": "${DESCRIPTION}", "url": "${URL}"}' localhost:8800/videos
+	@curl -s -X POST -H "Content-Type: application/json" -d '{"title": "${TITLE}", "description": "${DESCRIPTION}", "url": "${URL}"}' localhost:8800/api/videos
 
 .PHONY: post-video-auth
-post-video-auth: is-server-running ## Run a curl POST request with Auth to /videos with TITLE, DESCRIPTION, and URL passed into the JSON payload
+post-video-auth: is-server-running ## Run a curl POST request with Auth to /videos with TITLE, DESCRIPTION, and URL passed into the JSON payload.
 	$(call check_defined, TITLE)
 	$(call check_defined, DESCRIPTION)
 	$(call check_defined, URL)
-	@curl -s -X POST -u 'rogeruiz:test' -H "Content-Type: application/json" -d '{"title": "${TITLE}", "description": "${DESCRIPTION}", "url": "${URL}"}' localhost:8800/videos
+	@curl -s -X POST -u 'rogeruiz:test' -H "Content-Type: application/json" -d '{"title": "${TITLE}", "description": "${DESCRIPTION}", "url": "${URL}"}' localhost:8800/api/videos
 
 .PHONY: post-authored-video
-post-authored-video: is-server-running ## Run a curl POST request to /videos with TITLE, DESCRIPTION, URL, FIRSTNAME, LASTNAME, AGE, EMAIL passed into the JSON payload
+post-authored-video: is-server-running ## Run a curl POST request to /videos with TITLE, DESCRIPTION, URL, FIRSTNAME, LASTNAME, AGE, EMAIL passed into the JSON payload.
 	$(call check_defined, TITLE)
 	$(call check_defined, DESCRIPTION)
 	$(call check_defined, URL)
@@ -53,10 +53,10 @@ post-authored-video: is-server-running ## Run a curl POST request to /videos wit
 	$(call check_defined, LASTNAME)
 	$(call check_defined, AGE)
 	$(call check_defined, EMAIL)
-	@curl -s -X POST -H "Content-Type: application/json" -d '{"title": "${TITLE}", "description": "${DESCRIPTION}", "url": "${URL}", "author": {"first_name": "${FIRSTNAME}", "last_name": "${LASTNAME}", "age": ${AGE}, "email": "${EMAIL}"}}' localhost:8800/videos
+	@curl -s -X POST -H "Content-Type: application/json" -d '{"title": "${TITLE}", "description": "${DESCRIPTION}", "url": "${URL}", "author": {"first_name": "${FIRSTNAME}", "last_name": "${LASTNAME}", "age": ${AGE}, "email": "${EMAIL}"}}' localhost:8800/api/videos
 
 .PHONY: post-authored-video-auth
-post-authored-video-auth: is-server-running ## Run a curl POST request with Auth to /videos with TITLE, DESCRIPTION, URL, FIRSTNAME, LASTNAME, AGE, EMAIL passed into the JSON payload
+post-authored-video-auth: is-server-running ## Run a curl POST request with Auth to /videos with TITLE, DESCRIPTION, URL, FIRSTNAME, LASTNAME, AGE, EMAIL passed into the JSON payload.
 	$(call check_defined, TITLE)
 	$(call check_defined, DESCRIPTION)
 	$(call check_defined, URL)
@@ -64,7 +64,7 @@ post-authored-video-auth: is-server-running ## Run a curl POST request with Auth
 	$(call check_defined, LASTNAME)
 	$(call check_defined, AGE)
 	$(call check_defined, EMAIL)
-	@curl -s -X POST -u 'rogeruiz:test' -H "Content-Type: application/json" -d '{"title": "${TITLE}", "description": "${DESCRIPTION}", "url": "${URL}", "author": {"first_name": "${FIRSTNAME}", "last_name": "${LASTNAME}", "age": ${AGE}, "email": "${EMAIL}"}}' localhost:8800/videos
+	@curl -s -X POST -u 'rogeruiz:test' -H "Content-Type: application/json" -d '{"title": "${TITLE}", "description": "${DESCRIPTION}", "url": "${URL}", "author": {"first_name": "${FIRSTNAME}", "last_name": "${LASTNAME}", "age": ${AGE}, "email": "${EMAIL}"}}' localhost:8800/api/videos
 
 .PHONY: quick-seed-db
 quick-seed-db: is-server-running ## Run a very quick and simple seeding of the memory-cache for testing
