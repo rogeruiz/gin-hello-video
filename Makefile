@@ -10,6 +10,14 @@ is-server-running:
 	@nc -zv 127.0.0.1 8800 &> /dev/null || \
 		if [ $$? -eq 1 ]; then echo "The development server is not running.\nRun \`make run-dev\` in another terminal."; false; fi
 
+.PHONY: clean-vendor-files
+clean-vendor-files: ## Cleans up any templates/vendor files that are ignored by Git.
+	@rm -rvf templates/vendor/bootstrap-5.0.1-dist/
+
+.PHONY: expand-vendor-files
+expand-vendor-files: ## Expands the compressed vendor files in templates/vendor as a sibling directory. Use this to copy vendored library files manually as needed.
+	@unzip -d templates/vendor/ $(shell find templates/vendor/ -iname 'bootstrap*.zip')
+
 .PHONY: run-dev
 run-dev: ## Runs the development server
 	@go run server.go
@@ -57,6 +65,10 @@ post-authored-video-auth: is-server-running ## Run a curl POST request with Auth
 	$(call check_defined, AGE)
 	$(call check_defined, EMAIL)
 	@curl -s -X POST -u 'rogeruiz:test' -H "Content-Type: application/json" -d '{"title": "${TITLE}", "description": "${DESCRIPTION}", "url": "${URL}", "author": {"first_name": "${FIRSTNAME}", "last_name": "${LASTNAME}", "age": ${AGE}, "email": "${EMAIL}"}}' localhost:8800/videos
+
+.PHONY: quick-seed-db
+quick-seed-db: is-server-running ## Run a very quick and simple seeding of the memory-cache for testing
+	@./migrations/seed-db.sh
 
 .PHONY: help
 help: ## Outputs this help message.
