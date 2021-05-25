@@ -9,7 +9,7 @@ import (
 	"github.com/rogeruiz/gin-hello-world/controller"
 	"github.com/rogeruiz/gin-hello-world/middlewares"
 	"github.com/rogeruiz/gin-hello-world/service"
-	gindump "github.com/tpkeeper/gin-dump"
+	//gindump "github.com/tpkeeper/gin-dump"
 )
 
 var (
@@ -36,7 +36,7 @@ func main() {
 		gin.Recovery(),
 		middlewares.Logger(),
 		middlewares.BasicAuth(),
-		gindump.Dump(),
+		//gindump.Dump(),
 	)
 
 	apiRoutes := server.Group("/api")
