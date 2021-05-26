@@ -20,6 +20,11 @@ is-httpie-installed:
 	@which http &> /dev/null || \
 		if [ $$? -eq 1 ]; then echo "The \`httpie\` CLI is not installed.\nPlease install \`httpie\` from https://httpie.io/."; false; fi
 
+.PHONY: is-fd-installed
+is-fd-installed:
+	@which fd &> /dev/null || \
+		if [ $$? -eq 1 ]; then echo "The \`fd\` CLI is not installed.\nPlease install \`fd\` from https://github.com/sharkdp/fd#installation."; false; fi
+
 .PHONY: clean-data-files
 clean-data-files: ## Cleans up any migrations/tmp-data.json files that are ignored by Git.
 	@echo "Removing data files:"
@@ -31,9 +36,9 @@ clean-vendor-files: ## Cleans up any templates/vendor files that are ignored by 
 	@rm -rvf templates/vendor/bootstrap-5.0.1-dist/
 
 .PHONY: expand-vendor-files
-expand-vendor-files: ## Expands the compressed vendor files in templates/vendor as a sibling directory. Use this to copy vendored library files manually as needed.
+expand-vendor-files: is-fd-installed ## Expands the compressed vendor files in templates/vendor as a sibling directory. Use this to copy vendored library files manually as needed.
 	@echo "Explanding archives found in templates/vendor:"
-	@unzip -d templates/vendor/ $(shell find templates/vendor/ -iname 'bootstrap*.zip')
+	@unzip -d templates/vendor/ $(shell fd bootstrap -e zip templates/vendor)
 
 .PHONY: run-dev
 run-dev: ## Runs the development server.
