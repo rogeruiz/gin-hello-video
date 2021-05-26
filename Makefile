@@ -35,6 +35,11 @@ clean-vendor-files: ## Cleans up any templates/vendor files that are ignored by 
 	@echo "Removing vendor files:"
 	@rm -rvf templates/vendor/bootstrap-5.0.1-dist/
 
+.PHONY: clean-all
+clean-all: clean-data-files clean-vendor-files ## Cleans up all files that are ignored by Git.
+	@echo "Removing all other files:"
+	@rm -rvf gin.log
+
 .PHONY: expand-vendor-files
 expand-vendor-files: is-fd-installed ## Expands the compressed vendor files in templates/vendor as a sibling directory. Use this to copy vendored library files manually as needed.
 	@echo "Explanding archives found in templates/vendor:"
