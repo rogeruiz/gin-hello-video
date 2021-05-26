@@ -14,6 +14,11 @@ is-server-running:
 is-jq-installed:
 	@which jq &> /dev/null || \
 		if [ $$? -eq 1 ]; then echo "The \`jq\` CLI is not installed.\nPlease install \`jq\` from https://stedolan.github.io/jq/download/."; false; fi
+
+.PHONY: is-httpie-installed
+is-httpie-installed:
+	@which http &> /dev/null || \
+		if [ $$? -eq 1 ]; then echo "The \`httpie\` CLI is not installed.\nPlease install \`httpie\` from https://httpie.io/."; false; fi
 .PHONY: clean-vendor-files
 clean-vendor-files: ## Cleans up any templates/vendor files that are ignored by Git.
 	@rm -rvf templates/vendor/bootstrap-5.0.1-dist/
