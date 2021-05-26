@@ -40,29 +40,29 @@ run-dev: ## Runs the development server.
 	@go run server.go
 
 .PHONY: get-videos
-get-videos: is-server-running ## Run a curl GET request to /videos and pipe the reponse through `jq`.
-	@curl -s localhost:8800/api/videos | jq
+get-videos: is-server-running is-httpie-installed ## Run a curl GET request to /videos and pipe the reponse through `jq`.
+	@http :8800/api/videos
 
 .PHONY: get-videos-auth
-get-videos-auth: is-server-running ## Runs a curl GET request with Auth to /videos and pipe the response through `jq`.
-	@curl -s -u 'rogeruiz:test' localhost:8800/api/videos | jq
+get-videos-auth: is-server-running is-httpie-installed ## Runs a curl GET request with Basic Auth to /videos and pipe the response through `jq`.
+	@http -a 'rogeruiz:test' :8800/api/videos
 
 .PHONY: post-video
-post-video: is-server-running ## Run a curl POST request to /videos with TITLE, DESCRIPTION, and URL passed into the JSON payload.
+post-video: generate-json is-server-running is-httpie-installed ## Run a curl POST request to /videos with TITLE, DESCRIPTION, and URL passed into the JSON payload.
 	$(call check_defined, TITLE)
 	$(call check_defined, DESCRIPTION)
 	$(call check_defined, URL)
-	@curl -s -X POST -H "Content-Type: application/json" -d '{"title": "${TITLE}", "description": "${DESCRIPTION}", "url": "${URL}"}' localhost:8800/api/videos
+	@http POST :8800/api/videos < ./migrations/tmp-data.json
 
 .PHONY: post-video-auth
-post-video-auth: is-server-running ## Run a curl POST request with Auth to /videos with TITLE, DESCRIPTION, and URL passed into the JSON payload.
+post-video-auth: generate-json is-server-running is-httpie-installed ## Run a curl POST request with Basic Auth to /videos with TITLE, DESCRIPTION, and URL passed into the JSON payload.
 	$(call check_defined, TITLE)
 	$(call check_defined, DESCRIPTION)
 	$(call check_defined, URL)
-	@curl -s -X POST -u 'rogeruiz:test' -H "Content-Type: application/json" -d '{"title": "${TITLE}", "description": "${DESCRIPTION}", "url": "${URL}"}' localhost:8800/api/videos
+	@http -a 'rogeruiz:test' POST :8800/api/videos < ./migrations/tmp-data.json
 
 .PHONY: post-authored-video
-post-authored-video: is-server-running ## Run a curl POST request to /videos with TITLE, DESCRIPTION, URL, FIRSTNAME, LASTNAME, AGE, EMAIL passed into the JSON payload.
+post-authored-video: generate-json-with-author is-server-running is-httpie-installed ## Run a curl POST request to /videos with TITLE, DESCRIPTION, URL, FIRSTNAME, LASTNAME, AGE, EMAIL passed into the JSON payload.
 	$(call check_defined, TITLE)
 	$(call check_defined, DESCRIPTION)
 	$(call check_defined, URL)
@@ -70,10 +70,10 @@ post-authored-video: is-server-running ## Run a curl POST request to /videos wit
 	$(call check_defined, LASTNAME)
 	$(call check_defined, AGE)
 	$(call check_defined, EMAIL)
-	@curl -s -X POST -H "Content-Type: application/json" -d '{"title": "${TITLE}", "description": "${DESCRIPTION}", "url": "${URL}", "author": {"first_name": "${FIRSTNAME}", "last_name": "${LASTNAME}", "age": ${AGE}, "email": "${EMAIL}"}}' localhost:8800/api/videos
+	@http POST :8800/api/videos < ./migrations/tmp-data.json
 
 .PHONY: post-authored-video-auth
-post-authored-video-auth: is-server-running ## Run a curl POST request with Auth to /videos with TITLE, DESCRIPTION, URL, FIRSTNAME, LASTNAME, AGE, EMAIL passed into the JSON payload.
+post-authored-video-auth: generate-json-with-author is-server-running is-httpie-installed ## Run a curl POST request with Basic Auth to /videos with TITLE, DESCRIPTION, URL, FIRSTNAME, LASTNAME, AGE, EMAIL passed into the JSON payload.
 	$(call check_defined, TITLE)
 	$(call check_defined, DESCRIPTION)
 	$(call check_defined, URL)
@@ -81,7 +81,7 @@ post-authored-video-auth: is-server-running ## Run a curl POST request with Auth
 	$(call check_defined, LASTNAME)
 	$(call check_defined, AGE)
 	$(call check_defined, EMAIL)
-	@curl -s -X POST -u 'rogeruiz:test' -H "Content-Type: application/json" -d '{"title": "${TITLE}", "description": "${DESCRIPTION}", "url": "${URL}", "author": {"first_name": "${FIRSTNAME}", "last_name": "${LASTNAME}", "age": ${AGE}, "email": "${EMAIL}"}}' localhost:8800/api/videos
+	@http -a 'rogeruiz:test' POST :8800/api/videos < ./migrations/tmp-data.json
 
 .PHONY: quick-seed-db
 quick-seed-db: is-server-running ## Run a very quick and simple seeding of the memory-cache for testing
