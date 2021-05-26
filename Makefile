@@ -18,7 +18,7 @@ is-jq-installed:
 .PHONY: is-httpie-installed
 is-httpie-installed:
 	@which http &> /dev/null || \
-		if [ $$? -eq 1 ]; then echo "The \`httpie\` CLI is not installed.\nPlease install \`httpie\` from https://httpie.io/."; false; fi
+		if [ $$? -eq 1 ]; then echo "The \`httpie\` CLI is not installed.\nPlease install \`httpie\` from https://httpie.io/docs#installation."; false; fi
 
 .PHONY: is-fd-installed
 is-fd-installed:
