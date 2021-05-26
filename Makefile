@@ -10,6 +10,10 @@ is-server-running:
 	@nc -zv 127.0.0.1 8800 &> /dev/null || \
 		if [ $$? -eq 1 ]; then echo "The development server is not running.\nRun \`make run-dev\` in another terminal."; false; fi
 
+.PHONY: is-jq-installed
+is-jq-installed:
+	@which jq &> /dev/null || \
+		if [ $$? -eq 1 ]; then echo "The \`jq\` CLI is not installed.\nPlease install \`jq\` from https://stedolan.github.io/jq/download/."; false; fi
 .PHONY: clean-vendor-files
 clean-vendor-files: ## Cleans up any templates/vendor files that are ignored by Git.
 	@rm -rvf templates/vendor/bootstrap-5.0.1-dist/
