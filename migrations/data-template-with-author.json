@@ -1,0 +1,11 @@
+{
+  "title": $TITLE,
+  "description": $DESCRIPTION,
+  "url": $URL,
+  "author": {
+    "first_name": $FIRSTNAME,
+    "last_name": $LASTNAME,
+    "age": $AGE,
+    "email": $EMAIL
+  }
+}

@@ -1,5 +1,7 @@
 tmp/
 gin.log
 
+migrations/tmp-data.json
+
 templates/vendor/bootstrap-5.0.1-dist/
 !templates/vendor/bootstrap-5.0.1-dist.zip

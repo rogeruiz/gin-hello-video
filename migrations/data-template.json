@@ -1,0 +1,5 @@
+{
+  "title": $TITLE,
+  "description": $DESCRIPTION,
+  "url": $URL
+}
