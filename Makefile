@@ -19,6 +19,12 @@ is-jq-installed:
 is-httpie-installed:
 	@which http &> /dev/null || \
 		if [ $$? -eq 1 ]; then echo "The \`httpie\` CLI is not installed.\nPlease install \`httpie\` from https://httpie.io/."; false; fi
+
+.PHONY: clean-data-files
+clean-data-files: ## Cleans up any migrations/tmp-data.json files that are ignored by Git.
+	@echo "Removing data files:"
+	@rm -rvf migrations/tmp-data.json
+
 .PHONY: clean-vendor-files
 clean-vendor-files: ## Cleans up any templates/vendor files that are ignored by Git.
 	@echo "Removing vendor files:"
@@ -80,6 +86,40 @@ post-authored-video-auth: is-server-running ## Run a curl POST request with Auth
 .PHONY: quick-seed-db
 quick-seed-db: is-server-running ## Run a very quick and simple seeding of the memory-cache for testing
 	@./migrations/seed-db.sh
+
+.PHONY: generate-json
+generate-json: is-jq-installed clean-data-files ## Generates JSON for un-authored video posts with `jq` and saves them to ./migrations/tmp-data.json
+	$(call check_defined, TITLE)
+	$(call check_defined, DESCRIPTION)
+	$(call check_defined, URL)
+	jq -n \
+  --arg TITLE "${TITLE}" \
+  --arg DESCRIPTION "${DESCRIPTION}" \
+  --arg URL "${URL}" \
+  --raw-output \
+  -f ./migrations/data-template.json \
+> ./migrations/tmp-data.json
+
+.PHONY: generate-json-with-author
+generate-json-with-author: is-jq-installed clean-data-files ## Generates JSON for authored video posts with `jq` and saves them to ./migrations/tmp-data.json
+	$(call check_defined, TITLE)
+	$(call check_defined, DESCRIPTION)
+	$(call check_defined, URL)
+	$(call check_defined, FIRSTNAME)
+	$(call check_defined, LASTNAME)
+	$(call check_defined, AGE)
+	$(call check_defined, EMAIL)
+	jq -n \
+  --arg TITLE "${TITLE}" \
+  --arg DESCRIPTION "${DESCRIPTION}" \
+  --arg URL "${URL}" \
+  --arg FIRSTNAME "${FIRSTNAME}" \
+  --arg LASTNAME "${LASTNAME}" \
+  --argjson AGE "${AGE}" \
+  --arg EMAIL "${EMAIL}" \
+  --raw-output \
+  -f ./migrations/data-template-with-author.json \
+> ./migrations/tmp-data.json
 
 .PHONY: help
 help: ## Outputs this help message.
