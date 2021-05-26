@@ -7,7 +7,7 @@ set -e
 
 make post-authored-video-auth \
   TITLE="Cool Nintendo Switch headphones" \
-  DESCRIPTION="I am not a fan of wireless headphones." \
+  DESCRIPTION="I'm not a fan of wireless headphones." \
   URL="https://www.youtube.com/embed/rjAeCX4OBXU" \
   FIRSTNAME="WULFF" \
   LASTNAME="DEN" \
@@ -33,7 +33,7 @@ make post-authored-video-auth \
   EMAIL="video@youtube.com"
 
 make post-authored-video-auth \
-  TITLE="Cool Paul Mooney Black Hollywood 1984" \
+  TITLE="Cool Paul Mooney's Black Hollywood -- 1984" \
   DESCRIPTION="All of scenes of comedian Paul Mooney in British documentary BLACK HOLLYWOOD." \
   URL="https://www.youtube.com/embed/dX316_tNx5A" \
   FIRSTNAME="Paul" \
